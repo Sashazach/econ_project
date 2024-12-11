@@ -73,3 +73,79 @@ tr:nth-child(even) {
 tr:hover {
     background-color: #ccc;
 }
+
+#buttons-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px; /* Space between buttons */
+    margin-top: 30px; /* Space above the buttons container */
+    padding: 20px;
+    width: 90%;
+    max-width: 1200px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+/* Individual state button container */
+.state-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 150px; /* Adjust as needed */
+    padding: 15px;
+    background-color: #f2f2f2;
+    border: 1px solid #dddddd;
+    border-radius: 8px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.state-button:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Images inside the state buttons */
+.state-image {
+    width: 100px; /* Adjust size as needed */
+    height: auto;
+    margin-bottom: 10px;
+}
+
+/* Buttons inside the state-button containers */
+.state-button button {
+    padding: 10px 20px;
+    font-size: 16px;
+    font-family: "Open Sans", sans-serif;
+    color: #ffffff;
+    background-color: #4CAF50; /* Matches the table header */
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.state-button button:hover {
+    background-color: #45a049;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    #buttons-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .state-button {
+        width: 80%;
+    }
+
+    .state-image {
+        width: 80px;
+    }
+
+    .state-button button {
+        width: 100%;
+    }
+}
