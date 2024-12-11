@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="styleSheet" href="/static/styles.css">
+    <title>{{state}}</title>
+</head>
+    <body>
+        <p>
+            {{blurb}}
+        </p>
+        <br>
+        <table>
+            {% for row in data %}
+            <tr>
+                {% if loop.first %}
+                    {% for item in row %}
+                    <th>{{ item }}</th>
+                    {% endfor %}
+                {% else %}
+                    {% for item in row %}
+                    <td>{{ item }}</td>
+                    {% endfor %}
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </table>
+    </body>
+</html>
