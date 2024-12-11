@@ -1,6 +1,6 @@
 from openai import OpenAI
 from interests import INTERESTS
-client = OpenAI(api_key="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")
+client = OpenAI(api_key="")
 
 def analyzeAgreement(topic, compromise):
     completion = client.chat.completions.create(
