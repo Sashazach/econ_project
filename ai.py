@@ -8,7 +8,7 @@ def analyzeAgreement(topic, compromise):
         messages=[
             {"role": "user", "content": "You are an objective judge of compromises between parties."},
             {
-                "role": "user",
+                "role": "tool",
                 "content": f"""Here are the interests of each of the six teams regarding {topic}:
 **Team 1:**
 - {INTERESTS[0]}
@@ -36,4 +36,7 @@ Based on the above information, assign points to each of the six teams according
             }
         ]
     )
+    print(completion.choices[0].message.content)
     return [int(i) for i in completion.choices[0].message.content.split(',')]
+
+analyzeAgreement("Export Law", "There are now low tariffs on imports.")
