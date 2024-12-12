@@ -8,8 +8,6 @@
 </head>
     <body>
         <h1 class="title">{{state}}</h1>
-
-        <script src="/static/js/app.js"></script> 
         <p>
             {{blurb}}
         </p>
@@ -32,9 +30,10 @@
         <br>
 
         <div class="agreement-box">
-            <textarea id="inputText" placeholder="Begin drafting your agreement here" class="agreement"></textarea>
+            <textarea id="agreementBox" placeholder="Begin drafting your agreement here" class="agreement"></textarea>
             <button class="approveButton" id="approveButton">Approve</button>
         </div>
-          
+        <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
+        <script src="/static/js/app.js"></script> 
     </body>
 </html>
