@@ -2,7 +2,3 @@ Flask==2.2.2
 Flask_SocketIO==5.4.1
 openai==1.57.3
 Werkzeug==2.2.2
-eventlet==0.33.3
-gevent==22.10.2
-gevent-websocket==0.10.1
-python-dotenv==1.0.0
