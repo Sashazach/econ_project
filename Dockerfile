@@ -36,4 +36,4 @@ ENV PORT=8080
 EXPOSE 8080
 
 # Start the application using Gunicorn, binding to all network interfaces.
-CMD exec gunicorn --bind 0.0.0.0:$PORT --workers 3 --threads 2 --timeout 120 index:app
+CMD ["gunicorn", "--bind", "0.0.0.0:8080", "--workers", "3", "--threads", "2", "--timeout", "120", "index:app"]
