@@ -6,7 +6,7 @@ from interests import INTERESTS
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = secrets.token_urlsafe(32) # Important for security
-socketio = SocketIO(app, cors_allowed_origins="*")
+socketio = SocketIO(app, cors_allowed_origins="https://site-75299716458.northamerica-northeast1.run.app")
 
 states = ['ny', 'ma', 'ga', 'sc', 'pa', 'va']
 
