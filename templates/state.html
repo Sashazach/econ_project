@@ -7,6 +7,8 @@
     <title>{{state}}</title>
 </head>
     <body>
+        <script src="/static/js/app.js"></script> 
+
         <p>
             {{blurb}}
         </p>
@@ -26,5 +28,12 @@
             </tr>
             {% endfor %}
         </table>
+        <br>
+
+        <div class="agreement-box">
+            <textarea id="inputText" placeholder="Begin drafting your agreement here" class="agreement"></textarea>
+            <button class="approveButton" id="approveButton">Approve</button>
+        </div>
+          
     </body>
 </html>

@@ -82,7 +82,7 @@ tr:hover {
     margin-top: 30px; /* Space above the buttons container */
     padding: 20px;
     width: 90%;
-    max-width: 1200px;
+    max-width: 1300px;
     background-color: #ffffff;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
@@ -93,7 +93,7 @@ tr:hover {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 150px; /* Adjust as needed */
+    width: 160px; /* Adjust as needed */
     padding: 15px;
     background-color: #f2f2f2;
     border: 1px solid #dddddd;
@@ -108,15 +108,15 @@ tr:hover {
 
 /* Images inside the state buttons */
 .state-image {
-    width: 100px; /* Adjust size as needed */
+    width: 115px; /* Adjust size as needed */
     height: auto;
-    margin-bottom: 10px;
+    margin: auto;
 }
 
 /* Buttons inside the state-button containers */
 .state-button button {
     padding: 10px 20px;
-    font-size: 16px;
+    font-size: 15px;
     font-family: "Open Sans", sans-serif;
     color: #ffffff;
     background-color: #4CAF50; /* Matches the table header */
@@ -124,6 +124,17 @@ tr:hover {
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s;
+    width: 100%;
+    height: fit-content;
+}
+
+a {
+    cursor: pointer;
+    transition: background-color 0.3s;
+    height: fit-content;
+    width: 90%;
+    border-radius: 4px;
+    background-color: #4CAF50; /* Matches the table header */
 }
 
 .state-button button:hover {
@@ -149,3 +160,51 @@ tr:hover {
         width: 100%;
     }
 }
+
+.agreement-box {
+    height: 230px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.agreement {
+    font-size: 16px;
+    width: 90%;
+    height: 150px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    resize: vertical;
+    align-self: center; /* This centers the textarea horizontally */
+    margin: 0; /* Remove auto margin */
+}
+  
+  .approveButton {
+    margin: 0 auto;
+    background-color: #4CAF50;
+    color: white;
+    width: 25%;
+    height: 20%;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 25px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .approveButton:hover {
+    transform: translateY(-2px);
+    background-color: #45a049;
+    box-shadow: 0 8px 16px rgba(76, 175, 80, 0.3);
+  }
+  
+  .approveButton:active {
+    transform: translateY(1px);
+    box-shadow: 0 4px 8px rgba(76, 175, 80, 0.2);
+  }
