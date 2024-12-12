@@ -1,18 +1,39 @@
-# Dockerfile
-FROM python:3.9.17-bookworm
-# Allow statements and log messages to immediately appear in the logs
-ENV PYTHONUNBUFFERED True
-# Copy local code to the container image.
-ENV APP_HOME /back-end
-WORKDIR $APP_HOME
-COPY . ./
+# Use the official lightweight Python image.
+FROM python:3.9-slim
 
-RUN pip install --no-cache-dir --upgrade pip
+# Set environment variables for Python.
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
+
+# Install system dependencies.
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends gcc && \
+    rm -rf /var/lib/apt/lists/*
+
+# Create a non-root user.
+RUN useradd --create-home appuser
+
+# Set the working directory.
+WORKDIR /app
+
+# Copy only the requirements file to leverage Docker cache.
+COPY requirements.txt .
+
+# Install Python dependencies.
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Run the web service on container startup. Here we use the gunicorn
-# webserver, with one worker process and 8 threads.
-# For environments with multiple CPU cores, increase the number of workers
-# to be equal to the cores available.
-# Timeout is set to 0 to disable the timeouts of the workers to allow Cloud Run to handle instance scaling.
-CMD exec gunicorn --bind :$PORT --workers 1 --threads 8 --timeout 0 app:app
+# Copy the rest of the application code.
+COPY . .
+
+# Change ownership of the application directory.
+RUN chown -R appuser /app
+
+# Switch to the non-root user.
+USER appuser
+
+# Expose the port (Cloud Run uses the PORT environment variable, default is 8080).
+ENV PORT=8080
+EXPOSE 8080
+
+# Start the application using Gunicorn, binding to all network interfaces.
+CMD ["gunicorn", "--bind", "0.0.0.0:8080", "--workers", "3", "--threads", "2", "--timeout", "120", "index:app"]
