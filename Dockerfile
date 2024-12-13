@@ -33,8 +33,5 @@ RUN chown -R appuser /app
 # Switch to the non-root user
 USER appuser
 
-# Expose the port (Cloud Run uses the PORT environment variable, default is 8080)
-ENV PORT=8080
-
 # Start the application using Gunicorn
 CMD ["gunicorn", "--bind", "0.0.0.0:8080", "--workers", "3", "--threads", "2", "--timeout", "120", "index:app"]
