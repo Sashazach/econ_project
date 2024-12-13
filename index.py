@@ -1,5 +1,5 @@
 from flask import Flask, render_template
-from flask_socketio import SocketIO, emit
+#from flask_socketio import SocketIO, emit
 import secrets
 import os
 from interests import INTERESTS
