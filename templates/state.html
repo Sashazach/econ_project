@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="styleSheet" href="/static/styles.css">
-    <title>{{state}}</title>
+    <title>Test</title>
 </head>
     <body>
-        <h1 class="title">{{state}}</h1>
+        <h1 class="title" id="stateName">If you're seeing this something went wrong</h1>
         <p>
             {{blurb}}
         </p>
@@ -35,5 +35,6 @@
         </div>
         <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
         <script src="/static/js/app.js"></script> 
+        <script>loadStateTitle({{state}});</script>
     </body>
 </html>

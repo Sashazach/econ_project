@@ -117,7 +117,7 @@ tr:hover {
 /* Buttons inside the state-button containers */
 .state-button button {
     padding: 10px 20px;
-    font-size: 15px;
+    font-size: 14px;
     font-family: "Open Sans", sans-serif;
     color: #ffffff;
     background-color: #4CAF50; /* Matches the table header */
@@ -155,10 +155,6 @@ a {
 
     .state-image {
         width: 80px;
-    }
-
-    .state-button button {
-        width: 100%;
     }
 }
 

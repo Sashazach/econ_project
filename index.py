@@ -38,8 +38,9 @@ def home():
 
 def state_page(state):
     return_data = [states] + data
-    blurb = INTERESTS[states.index(state)]
-    return render_template('state.html', state=state, data=return_data, blurb=blurb)
+    stateIndex = states.index(state)
+    blurb = INTERESTS[stateIndex]
+    return render_template('state.html', state=stateIndex, data=return_data, blurb=blurb)
 
 # Define routes for each state
 @app.route('/ny')

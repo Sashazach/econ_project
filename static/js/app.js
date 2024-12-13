@@ -1,5 +1,7 @@
 const socket = io();
 
+const STATES = ["New York", "Massachusetts", "Georgia", "South Carolina", "Pennsylvania", "Virginia"]
+
 socket.on('connect', () => {
     console.log('Successfully connected to the server');
 });
@@ -32,3 +34,10 @@ const agreementBox = document.getElementById('agreementBox');
 agreementBox.addEventListener('input', () => {  
     socket.emit('text_update', { text: agreementBox.value });
 });
+
+const loadStateTitle = function(state) {
+    const titleBox = document.getElementById('stateName')
+    console.log('test')
+    titleBox.textContent = STATES[state]
+};
+
