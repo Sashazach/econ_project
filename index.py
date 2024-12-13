@@ -65,4 +65,5 @@ def page_pa():
 def page_va():
     return state_page('va')
 
+print("test")
 app.run(debug=True)
