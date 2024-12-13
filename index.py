@@ -1,6 +1,7 @@
 from flask import Flask, render_template
 from flask_socketio import SocketIO, emit
 import secrets
+import os
 from interests import INTERESTS
 
 app = Flask(__name__)
@@ -67,3 +68,5 @@ def page_va():
 if __name__ == '__main__':
     # Use socketio.run instead of app.run to properly handle SocketIO
     socketio.run(app, debug=True)
+    port = int(os.environ.get("PORT", 8080))  # Default to 8080
+    socketio.run(app, host="0.0.0.0", port=port)
