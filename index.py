@@ -67,4 +67,4 @@ def page_va():
 
 if __name__ == '__main__':
     # Use socketio.run instead of app.run to properly handle SocketIO
-    socketio.run(app, debug=True)
+    app.run(debug=True)
