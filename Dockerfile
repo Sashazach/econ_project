@@ -33,4 +33,4 @@ RUN chown -R appuser /app
 USER appuser
 
 # Start the application using Gunicorn, binding to the PORT environment variable
-CMD ["sh", "-c", "gunicorn --bind 0.0.0.0:${PORT} --workers 3 --threads 2 --timeout 120 index:app"]
+CMD ["sh", "-c", "gunicorn --bind 0.0.0.0:${PORT} --workers 3 --threads 2 --timeout 200 index:app"]
