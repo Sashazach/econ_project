@@ -1,5 +1,5 @@
 from flask import Flask, render_template
-#from flask_socketio import SocketIO, emit
+from flask_socketio import SocketIO, emit
 import secrets
 import os
 from interests import INTERESTS
@@ -7,7 +7,7 @@ from interests import INTERESTS
 app = Flask(__name__)
 app.config['SECRET_KEY'] = secrets.token_urlsafe(32)
 
-#socketio = SocketIO(app, cors_allowed_origins="*", async_mode='threading')
+socketio = SocketIO(app, cors_allowed_origins="*", async_mode='threading')
 
 states = ['ny', 'ma', 'ga', 'sc', 'pa', 'va']
 
@@ -15,7 +15,6 @@ data = [[0 for _ in states] for _ in range(4)]
 
 current_text = ""
 
-"""
 @socketio.on('message')
 def handle_message(message):
     print('received message: ' + message)
@@ -31,7 +30,8 @@ def handle_text_update(data):
     current_text = data.get('text', '')
     print("Received update to box:", current_text)
     emit('text_update', data, broadcast=True, include_self=False)
-"""
+
+
 @app.route('/')
 def home():
     return render_template('home.html')
@@ -68,5 +68,4 @@ def page_va():
 
 if __name__ == '__main__':
     print("test")
-    # Use socketio.run instead of app.run to properly handle SocketIO
-    app.run(debug=True)
+    app.run(debug=True, port=8080)
