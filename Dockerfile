@@ -1,6 +1,8 @@
 # Use the official lightweight Python image
 FROM python:3.9-slim
 
+EXPOSE PORT
+
 # Set environment variables for Python
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1
