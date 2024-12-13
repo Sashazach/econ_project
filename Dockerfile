@@ -5,13 +5,11 @@ FROM python:3.9-slim
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y --no-install-recommends gcc && \
-    apt-get clean && rm -rf /var/lib/apt/lists/*
-
-# Install gevent dependencies
-RUN apt-get update && apt-get install -y libffi-dev libssl-dev && \
-    apt-get clean && rm -rf /var/lib/apt/lists/*
+# Install system and gevent dependencies
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends gcc libffi-dev libssl-dev && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 # Create a non-root user
 RUN useradd --create-home appuser
@@ -34,9 +32,5 @@ RUN chown -R appuser /app
 # Switch to the non-root user
 USER appuser
 
-# Expose the port (Cloud Run uses the PORT environment variable, default is 8080)
-ENV PORT=8080
-EXPOSE 8080
-
-# Start the application using Gunicorn
-CMD ["gunicorn", "--bind", "0.0.0.0:8080", "--workers", "3", "--threads", "2", "--timeout", "120", "index:app"]
+# Start the application using Gunicorn, binding to the PORT environment variable
+CMD ["sh", "-c", "gunicorn --bind 0.0.0.0:${PORT} --workers 3 --threads 2 --timeout 120 index:app"]
