@@ -19,13 +19,13 @@ RUN useradd --create-home appuser
 WORKDIR /app
 
 # Copy requirements first to leverage Docker cache
-COPY requirements.txt .
+COPY requirements.txt /app/
 
 # Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the rest of the application code
-COPY . .
+COPY . /app/
 
 # Change ownership of the application directory
 RUN chown -R appuser /app

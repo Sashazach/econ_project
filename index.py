@@ -5,7 +5,7 @@ import os
 from interests import INTERESTS
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = secrets.token_urlsafe(32)  # Important for security
+app.config['SECRET_KEY'] = secrets.token_urlsafe(32)
 
 socketio = SocketIO(app, cors_allowed_origins="*", async_mode='threading')
 
