@@ -65,6 +65,4 @@ def page_pa():
 def page_va():
     return state_page('va')
 
-if __name__ == '__main__':
-    # Use socketio.run instead of app.run to properly handle SocketIO
-    app.run(debug=True)
+app.run(debug=True)
