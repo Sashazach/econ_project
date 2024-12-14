@@ -33,8 +33,17 @@
             <textarea id="agreementBox" placeholder="Begin drafting your agreement here" class="agreement"></textarea>
             <button class="approveButton" id="approveButton">Approve</button>
         </div>
+        <div id="round-info">
+            <p>Current Phase: <span id="currentPhase">N/A</span></p>
+            <p>Time Remaining: <span id="timeRemaining">00:00</span></p>
+        </div>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
-        <script src="/static/js/app.js"></script> 
-        <script>loadStateTitle({{state}});</script>
+        <script src="/static/js/state.js"></script>
+        <script>
+            $(document).ready(function() {
+                loadStateTitle("{{state}}");
+            });
+        </script>
     </body>
 </html>
