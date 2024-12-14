@@ -1,5 +1,7 @@
 var socket = io();
 
+const STATES = ["New York", "Massachusetts", "Georgia", "South Carolina", "Pennsylvania", "Virginia"];
+
 $(window).bind("pageshow", function (event) {
     if (event.originalEvent.persisted) {
         if (socket) {
@@ -17,8 +19,6 @@ function initiateConnection() {
         rememberTransport: false,
         transports: ["websocket"],
     });
-
-    const STATES = ["New York", "Massachusetts", "Georgia", "South Carolina", "Pennsylvania", "Virginia"];
 
     socket.on('connect', () => {
         console.log('Successfully connected to the server');

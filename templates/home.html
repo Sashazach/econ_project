@@ -7,6 +7,10 @@
     <link rel="styleSheet" href="/static/styles.css">
 </head>
 <body>    
+    <div id="round-info" class="round-info">
+        <span id="currentPhase">N/A</span>
+        <span id="timeRemaining">00:00</span>
+    </div>
     <h1 class="title">Econ Game: Constitution Compromise</h1>
     <p class="container1">
         Its 1787; 2-7 delegates from each of the 13 colonies are meeting at a privately held convention in Philadelphia known
@@ -65,10 +69,6 @@
                 <button>Georgia</button>
             </a>
         </div>
-    </div>
-    <div id="round-info">
-        <p>Current Phase: <span id="currentPhase">N/A</span></p>
-        <p>Time Remaining: <span id="timeRemaining">00:00</span></p>
     </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
