@@ -73,7 +73,13 @@
 
     <button id="adminMenuButton" class="admin-menu-button">Admin Menu</button>
 
-    <div id="adminMenu" class="admin-menu">
+    <div id="passwordPrompt" class="password-prompt" style="display: none;">
+        <input type="password" id="adminPassword" placeholder="Enter Password">
+        <button id="submitPasswordButton">Submit</button>
+        <button id="closePasswordPromptButton">X</button>
+    </div>
+
+    <div id="adminMenu" class="admin-menu" style="display: none;">
         <button id="beginRound1Button" class="begin-round-button">Begin Round 1</button>
         <button id="beginRound2Button" class="begin-round-button">Begin Round 2</button>
         <button id="beginRound3Button" class="begin-round-button">Begin Round 3</button>

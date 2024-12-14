@@ -14,6 +14,7 @@ socketio = SocketIO(app, cors_allowed_origins="*", async_mode='threading')
 states = ['ny', 'ma', 'ga', 'sc', 'pa', 'va']
 round_topics = ["Export Law", "Healthcare", "Education", "Infrastructure", "Climate Change"]
 
+ADMIN_PASSWORD = "Econ"
 
 data = [[0 for _ in states] for _ in range(4)]
 
@@ -100,6 +101,14 @@ def handle_submit_agreement(data):
             row[i] += point
     
     emit('data_update', {'data': data}, broadcast=True)
+
+@socketio.on('verify_password')
+def handle_verify_password(data):
+    password = data.get('password', '')
+    if password == ADMIN_PASSWORD:
+        emit('password_verification', {'success': True})
+    else:
+        emit('password_verification', {'success': False})
 
 @app.route('/')
 def home():

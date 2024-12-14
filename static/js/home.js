@@ -12,10 +12,31 @@ $(window).bind("pageshow", function (event) {
 });
 
 $(document).ready(function() {
+    $('#adminMenuButton').show(); // Make the button visible
+    $('#adminMenu').hide(); // Ensure the admin menu starts invisible
+    $('#passwordPrompt').hide(); // Ensure the password prompt starts invisible
     initiateConnection();
 
     $('#adminMenuButton').click(function() {
-        $('#adminMenu').toggle();
+        $('#passwordPrompt').show();
+    });
+
+    $('#submitPasswordButton').click(function() {
+        const password = $('#adminPassword').val();
+        socket.emit('verify_password', { password: password });
+    });
+
+    $('#closePasswordPromptButton').click(function() {
+        $('#passwordPrompt').hide();
+    });
+
+    socket.on('password_verification', (data) => {
+        if (data.success) {
+            $('#passwordPrompt').hide();
+            $('#adminMenu').show();
+        } else {
+            alert('Incorrect password');
+        }
     });
 
     $('.close-admin-menu-button').click(function() {
