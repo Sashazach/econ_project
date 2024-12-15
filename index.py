@@ -69,8 +69,12 @@ def handle_submit_agreement():
     
     emit('data_update', {'data': data}, broadcast=True)
 
+def send_notification(message):
+    emit('show_notification', {'message': message}, broadcast=True)
+
 @socketio.on('begin_round')
 def handle_begin_round(round: int):
+    send_notification(f"Round {round} has started.")
     global roundIndex, round_running
     roundIndex = round
     if not round_running:

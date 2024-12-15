@@ -382,3 +382,43 @@ a {
 #closePasswordPromptButton:hover {
     color: #ff0000;
 }
+
+.notification {
+    position: fixed;
+    top: 20px;
+    left: 20px;  /* Changed from right to left */
+    padding: 15px 25px;
+    background-color: #333;
+    color: white;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    z-index: 1000;
+    animation: slide-in-left 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.notification.fade-out {
+    animation: fade-out-left 0.5s cubic-bezier(0.55, 0.085, 0.68, 0.53);
+    opacity: 0;  /* Ensure opacity is set to 0 */
+}
+
+@keyframes slide-in-left {
+    from { 
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    to { 
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fade-out-left {
+    from { 
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to { 
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+}

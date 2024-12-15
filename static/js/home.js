@@ -113,4 +113,16 @@ function initiateConnection() {
         console.log('Reconnected to the server');
         socket.emit('request_phase_update');
     });
+
+    socket.on('show_notification', (data) => {
+        const notification = document.createElement('div');
+        notification.className = 'notification';
+        notification.textContent = data.message;
+        document.body.appendChild(notification);
+
+        setTimeout(() => {
+            notification.classList.add('fade-out');
+            notification.addEventListener('animationend', () => notification.remove());
+        }, 3000);
+    });
 }
