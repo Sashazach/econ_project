@@ -15,16 +15,23 @@ $(window).bind("pageshow", function (event) {
 $(document).ready(initiateConnection);
 
 function updateDataTable(data) {
+    console.log(data);
     // Skip the first row of data (headers)
-    const dataRows = data.slice(1);
+    const dataRows = data.filter(row => row.some(val => val !== 0));
+    const table = document.getElementById('dataTable');
     
-    // Update only the data cells, preserving headers
+    // Update only the data rows that have non-zero values
     dataRows.forEach((row, rowIndex) => {
+        // Skip row 1 if it already exists
+        if (rowIndex === 0 && table.querySelector('tr:nth-child(2)')) {
+            return;
+        }
+
         // Find existing row or create new one
-        let tr = document.querySelector(`#dataTable tr:nth-child(${rowIndex + 2})`);
+        let tr = table.querySelector(`tr:nth-child(${rowIndex + 2})`);
         if (!tr) {
             tr = document.createElement('tr');
-            document.getElementById('dataTable').appendChild(tr);
+            table.appendChild(tr);
         }
         
         // Add/update round header (R1, R2, etc.)

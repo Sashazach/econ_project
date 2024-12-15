@@ -16,6 +16,7 @@ app.config['SECRET_KEY'] = secrets.token_urlsafe(32)
 
 socketio = SocketIO(app, cors_allowed_origins="*", async_mode='threading')
 
+stateNames = ["New York", "Massachusetts", "Georgia", "South Carolina", "Pennsylvania", "Virginia"];
 states = ['ny', 'ma', 'ga', 'sc', 'pa', 'va']
 round_topics = ["Export Law", "Healthcare", "Education", "Infrastructure", "Climate Change"]
 
@@ -32,10 +33,10 @@ round_running = False  # Add a flag to track if a round is running
 paused = False  # Add a flag to track if the round is paused
 
 round_phases = {
-    1: [("Opening Statements", 15), ("Discussion", 15), ("Voting", 20)],
-    2: [("Opening Statements", 20), ("Discussion", 30), ("Voting", 25)],
-    3: [("Opening Statements", 15), ("Discussion", 15), ("Voting", 20)],
-    4: [("Opening Statements", 20), ("Discussion", 30), ("Voting", 25)],
+    0: [("Opening Statements", 15), ("Discussion", 15), ("Voting", 20)],
+    1: [("Opening Statements", 20), ("Discussion", 30), ("Voting", 25)],
+    2: [("Opening Statements", 15), ("Discussion", 15), ("Voting", 20)],
+    3: [("Opening Statements", 20), ("Discussion", 30), ("Voting", 25)],
 }
 
 def run_round(round : int):
@@ -56,7 +57,7 @@ def run_round(round : int):
     round_running = False
 
 def handle_submit_agreement():
-    print("Agreement submitted. Making API call...")
+    send_notification("Agreement submitted. Making API call...")
     points = analyzeAgreement(round_topics[roundIndex], current_text)
     send_notification("Agreement evaluated. Updating scores...")
     if len(points) != len(states):
@@ -64,12 +65,12 @@ def handle_submit_agreement():
         return
     
     for i, point in enumerate(points):
-        data[roundIndex-1][i] += point
+        data[roundIndex][i] += point
     
     emit('data_update', {'data': data}, broadcast=True)
 
     # Check if the current round is the last round (roundIndex 4)
-    if roundIndex == 4:
+    if roundIndex == 3:
         send_notification("Game over! Redirecting to the congratulations screen...")
         emit('redirect', {'url': url_for('congratulations')}, broadcast=True)
 
@@ -80,11 +81,11 @@ def send_notification(message):
 def handle_begin_round(round: int):
     send_notification(f"Round {round} has started.")
     global roundIndex, round_running
-    roundIndex = round
+    roundIndex = round-1
     if not round_running:
         for i in range(len(state_approvals)):
             state_approvals[i] = False
-        thread = threading.Thread(target=run_round, args=(round,))
+        thread = threading.Thread(target=run_round, args=(roundIndex,))
         thread.start()
         emit('phase_update', {'phase': 'Round Started.', 'time_remaining': 0}, broadcast=True)
     else:
@@ -126,7 +127,6 @@ def handle_approval_granted(state):
     if all(state_approvals):
         for i in range(len(state_approvals)):
             state_approvals[i] = False
-        send_notification("Using Ai to evaluate agreement...")
         handle_submit_agreement()
 
 @socketio.on('verify_password')
@@ -147,7 +147,7 @@ def home():
 
 @app.route('/congratulations')
 def congratulations():
-    return render_template('congratulations.html')
+    return render_template('congratulations.html', winner=stateNames[get_highest_total_column()])
 
 def state_page(state):
     stateIndex = states.index(state)
@@ -158,6 +158,13 @@ def state_page(state):
     else:
         totals = [0] * len(states)
     return render_template('state.html', state=stateIndex, states=states, data=data, blurb=blurb, totals=totals)
+
+def get_highest_total_column():
+    if not data:
+        return None
+    totals = [sum(col) for col in zip(*data)]
+    highest_total_index = totals.index(max(totals))
+    return highest_total_index
 
 # Define routes for each state
 @app.route('/ny')

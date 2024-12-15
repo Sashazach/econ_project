@@ -1,7 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const winnerName = document.getElementById('winnerName');
-    winnerName.textContent = "John Doe"; // Example name
-
     // Festive color palette
     const colors = [
         '#FF6B6B', // coral
@@ -23,18 +20,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Continuous confetti
-    const duration = 15 * 1000;
-    const animationEnd = Date.now() + duration;
-
     function randomInRange(min, max) {
         return Math.random() * (max - min) + min;
     }
 
     (function frame() {
-        const timeLeft = animationEnd - Date.now();
-
-        if (timeLeft <= 0) return;
-
         confetti({
             particleCount: 3,
             angle: 60,
