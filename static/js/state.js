@@ -14,6 +14,39 @@ $(window).bind("pageshow", function (event) {
 
 $(document).ready(initiateConnection);
 
+function updateDataTable(data) {
+    // Skip the first row of data (headers)
+    const dataRows = data.slice(1);
+    
+    // Update only the data cells, preserving headers
+    dataRows.forEach((row, rowIndex) => {
+        // Find existing row or create new one
+        let tr = document.querySelector(`#dataTable tr:nth-child(${rowIndex + 2})`);
+        if (!tr) {
+            tr = document.createElement('tr');
+            document.getElementById('dataTable').appendChild(tr);
+        }
+        
+        // Add/update round header (R1, R2, etc.)
+        let roundHeader = tr.querySelector('th');
+        if (!roundHeader) {
+            roundHeader = document.createElement('th');
+            tr.appendChild(roundHeader);
+        }
+        roundHeader.textContent = `R${rowIndex + 1}`;
+        
+        // Update data cells
+        row.forEach((item, colIndex) => {
+            let td = tr.children[colIndex + 1];
+            if (!td) {
+                td = document.createElement('td');
+                tr.appendChild(td);
+            }
+            td.textContent = item;
+        });
+    });
+}
+
 function initiateConnection() {
     var socket = io(window.location.host, {
         rememberTransport: false,
@@ -54,11 +87,16 @@ function initiateConnection() {
         }
     });
 
-    const approveButton = document.getElementById('approveButton');
-    approveButton.addEventListener('click', function() {
-        console.log('Approve button clicked!');
-        socket.emit('message', 'test');
+    socket.on('data_update', (data) => {
+        updateDataTable(data.data);
     });
+
+    function approveFunction(state) {
+        console.log('Approve button clicked with state:', state);
+        socket.emit('approval_granted', state);
+    }
+
+    window.approveFunction = approveFunction;
 
     const agreementBox = document.getElementById('agreementBox');
     agreementBox.addEventListener('input', () => {  
@@ -68,6 +106,5 @@ function initiateConnection() {
 
 const loadStateTitle = function(state) {
     const titleBox = document.getElementById('stateName');
-    console.log('test');
     titleBox.textContent = STATES[state];
 };

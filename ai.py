@@ -6,7 +6,7 @@ def analyzeAgreement(topic, compromise):
     completion = client.chat.completions.create(
         model="o1-mini",
         messages=[
-            {"role": "system", "content": "You are an objective judge of compromises between parties."},
+            {"role": "user", "content": "You are an objective judge of compromises between parties."},
             {
                 "role": "user",
                 "content": f"""Here are the interests of each of the six teams regarding {topic}:

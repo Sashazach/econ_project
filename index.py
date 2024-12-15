@@ -6,6 +6,11 @@ import time
 from interests import INTERESTS
 from ai import analyzeAgreement  # Import the analyzeAgreement function
 
+state_approvals = [False, False, False, False, False, False]
+
+global roundIndex
+roundIndex = 0
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = secrets.token_urlsafe(32)
 
@@ -18,6 +23,7 @@ ADMIN_PASSWORD = "Econ"
 
 data = [[0 for _ in states] for _ in range(4)]
 
+global current_text
 current_text = ""
 
 current_phase = "Waiting for round to start."
@@ -34,7 +40,8 @@ round_phases = {
 }
 
 def run_round(round : int):
-    global current_phase, time_remaining, round_running, paused
+    global current_phase, time_remaining, round_running, paused, roundIndex
+    roundIndex = round
     round_running = True
     for phase, duration in round_phases[round]:
         current_phase = phase
@@ -49,12 +56,26 @@ def run_round(round : int):
     socketio.emit('phase_update', {'phase': current_phase, 'time_remaining': time_remaining})
     round_running = False
 
+def handle_submit_agreement():
+    print("Agreement submitted. Making API call...")
+    points = analyzeAgreement(round_topics[roundIndex], current_text)
+    
+    if len(points) != len(states):
+        emit('error', {'message': 'Invalid points received from analysis.'})
+        return
+    
+    for i, point in enumerate(points):
+        data[roundIndex][i] += point
+    
+    emit('data_update', {'data': data}, broadcast=True)
+
 @socketio.on('begin_round')
 def handle_begin_round(round: int):
-    global roundIndex
+    global roundIndex, round_running
     roundIndex = round
-    global round_running
     if not round_running:
+        for i in range(len(state_approvals)):
+            state_approvals[i] = False
         thread = threading.Thread(target=run_round, args=(round,))
         thread.start()
         emit('phase_update', {'phase': 'Round Started.', 'time_remaining': 0}, broadcast=True)
@@ -86,21 +107,15 @@ def handle_text_update(data):
     global current_text
     current_text = data.get('text', '')
     emit('text_update', data, broadcast=True, include_self=False)
+    for state in state_approvals:
+        state_approvals[state] = False
 
-@socketio.on('submit_agreement')
-def handle_submit_agreement(data):
-    topic = data.get('topic', 'Default Topic')  # Adjust as needed
-    points = analyzeAgreement(round_topics[roundIndex], data)
-    
-    if len(points) != len(states):
-        emit('error', {'message': 'Invalid points received from analysis.'})
-        return
-    
-    for i, point in enumerate(points):
-        for row in data:
-            row[i] += point
-    
-    emit('data_update', {'data': data}, broadcast=True)
+@socketio.on('approval_granted')
+def handle_approval_granted(state):
+    state_approvals[int(state)] = True
+    print(state_approvals)
+    if all(state_approvals):
+        handle_submit_agreement()
 
 @socketio.on('verify_password')
 def handle_verify_password(data):

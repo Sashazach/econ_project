@@ -16,14 +16,16 @@
             {{blurb}}
         </p>
         <br>
-        <table>
+        <table id="dataTable">
             {% for row in data %}
             <tr>
                 {% if loop.first %}
+                    <th></th>
                     {% for item in row %}
                     <th>{{ item }}</th>
                     {% endfor %}
                 {% else %}
+                    <th>R{{ loop.index - 1 }}</th>
                     {% for item in row %}
                     <td>{{ item }}</td>
                     {% endfor %}
@@ -35,7 +37,7 @@
 
         <div class="agreement-box">
             <textarea id="agreementBox" placeholder="Begin drafting your agreement here" class="agreement"></textarea>
-            <button class="approveButton" id="approveButton">Approve</button>
+            <button class="approveButton" id="approveButton" onclick="approveFunction('{{state}}')">Approve</button>
         </div>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>

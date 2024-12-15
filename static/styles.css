@@ -66,6 +66,12 @@ th {
     text-transform: uppercase;
 }
 
+th:first-child {
+    width: 60px;
+    min-width: 60px;
+    padding: 8px;
+}
+
 tr:nth-child(even) {
     background-color: #f2f2f2;
 }
