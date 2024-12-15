@@ -25,13 +25,24 @@
                     <th>{{ item }}</th>
                     {% endfor %}
                 {% else %}
-                    <th>R{{ loop.index - 1 }}</th>
+                    <th>R{{ loop.index0 }}</th>
                     {% for item in row %}
                     <td>{{ item }}</td>
                     {% endfor %}
                 {% endif %}
             </tr>
             {% endfor %}
+            <tr class="totals-row">
+                <th>Total</th>
+                {% set max_total = totals | max %}
+                {% for total in totals %}
+                    {% if total == max_total %}
+                        <td class="highest-total">{{ total }}</td>
+                    {% else %}
+                        <td>{{ total }}</td>
+                    {% endif %}
+                {% endfor %}
+            </tr>
         </table>
         <br>
 

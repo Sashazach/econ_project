@@ -422,3 +422,28 @@ a {
         opacity: 0;
     }
 }
+
+/* Add these new styles */
+.totals-row {
+    font-weight: bold;
+    background-color: #f8f8f8 !important;
+}
+
+.totals-row th {
+    background-color: #45a049;
+}
+
+.highest-total {
+    background-color: #4CAF50 !important;
+    color: white;
+    font-weight: bold;
+}
+
+/* Modify existing table styles */
+tr:hover td {
+    background-color: #ccc;
+}
+
+tr:hover td.highest-total {
+    background-color: #45a049 !important;
+}

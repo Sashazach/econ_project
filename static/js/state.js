@@ -45,6 +45,44 @@ function updateDataTable(data) {
             td.textContent = item;
         });
     });
+
+    // Add totals row
+    let totalsRow = document.querySelector('#dataTable tr.totals-row');
+    if (!totalsRow) {
+        totalsRow = document.createElement('tr');
+        totalsRow.className = 'totals-row';
+        document.getElementById('dataTable').appendChild(totalsRow);
+    }
+
+    // Add "Total" header cell
+    let totalHeader = totalsRow.querySelector('th');
+    if (!totalHeader) {
+        totalHeader = document.createElement('th');
+        totalsRow.appendChild(totalHeader);
+    }
+    totalHeader.textContent = 'Total';
+
+    // Calculate and update totals
+    const columnCount = dataRows[0].length;
+    let maxTotal = -Infinity;
+    let totals = new Array(columnCount).fill(0);
+
+    // Calculate totals for each column
+    for (let col = 0; col < columnCount; col++) {
+        totals[col] = dataRows.reduce((sum, row) => sum + Number(row[col]), 0);
+        maxTotal = Math.max(maxTotal, totals[col]);
+    }
+
+    // Update totals cells
+    totals.forEach((total, colIndex) => {
+        let td = totalsRow.children[colIndex + 1];
+        if (!td) {
+            td = document.createElement('td');
+            totalsRow.appendChild(td);
+        }
+        td.textContent = total;
+        td.className = total === maxTotal ? 'highest-total' : '';
+    });
 }
 
 function initiateConnection() {

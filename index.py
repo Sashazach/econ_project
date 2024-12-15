@@ -59,7 +59,7 @@ def run_round(round : int):
 def handle_submit_agreement():
     print("Agreement submitted. Making API call...")
     points = analyzeAgreement(round_topics[roundIndex], current_text)
-    
+    send_notification("Agreement evaluated. Updating scores...")
     if len(points) != len(states):
         emit('error', {'message': 'Invalid points received from analysis.'})
         return
@@ -111,14 +111,17 @@ def handle_text_update(data):
     global current_text
     current_text = data.get('text', '')
     emit('text_update', data, broadcast=True, include_self=False)
-    for state in state_approvals:
-        state_approvals[state] = False
+    for i in range(len(state_approvals)):
+        state_approvals[i] = False
 
 @socketio.on('approval_granted')
 def handle_approval_granted(state):
     state_approvals[int(state)] = True
     print(state_approvals)
     if all(state_approvals):
+        for i in range(len(state_approvals)):
+            state_approvals[i] = False
+        send_notification("Using Ai to evaluate agreement...")
         handle_submit_agreement()
 
 @socketio.on('verify_password')
@@ -137,7 +140,12 @@ def state_page(state):
     return_data = [states] + data
     stateIndex = states.index(state)
     blurb = INTERESTS[stateIndex]
-    return render_template('state.html', state=stateIndex, data=return_data, blurb=blurb)
+    # Compute totals for each column
+    if data:
+        totals = [sum(col) for col in zip(*data)]
+    else:
+        totals = [0] * len(states)
+    return render_template('state.html', state=stateIndex, data=return_data, blurb=blurb, totals=totals)
 
 # Define routes for each state
 @app.route('/ny')
