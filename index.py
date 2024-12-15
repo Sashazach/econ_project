@@ -147,7 +147,7 @@ def home():
 
 @app.route('/congratulations')
 def congratulations():
-    return render_template('congratulations.html', winner=stateNames[get_highest_total_column()])
+    return render_template('congratulations.html', winner=format_highest_total_columns(get_highest_total_column()))
 
 def state_page(state):
     stateIndex = states.index(state)
@@ -163,8 +163,17 @@ def get_highest_total_column():
     if not data:
         return None
     totals = [sum(col) for col in zip(*data)]
-    highest_total_index = totals.index(max(totals))
-    return highest_total_index
+    highest_total = max(totals)
+    highest_total_indices = [index for index, total in enumerate(totals) if total == highest_total]
+    return highest_total_indices
+
+def format_highest_total_columns(indices):
+    if not indices:
+        return ""
+    names = [stateNames[index] for index in indices]
+    if len(names) == 1:
+        return names[0]
+    return ", ".join(names[:-1]) + " and " + names[-1]
 
 # Define routes for each state
 @app.route('/ny')
