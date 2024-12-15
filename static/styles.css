@@ -571,6 +571,7 @@ tr:hover td.highest-total {
     margin-bottom: 2rem;
     background: linear-gradient(45deg, #4CAF50, #45a049);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
     text-shadow: none;
 }
