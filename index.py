@@ -104,6 +104,7 @@ def handle_request_phase_update():
 def handle_connect():
     emit('text_update', {'text': current_text})
     emit('phase_update', {'phase': current_phase, 'time_remaining': time_remaining})
+    emit('data_update', {'data': data})
     print("A new client has connected. Current text and phase sent.")
     
 @socketio.on('text_update')
@@ -137,7 +138,6 @@ def home():
     return render_template('home.html')
 
 def state_page(state):
-    return_data = [states] + data
     stateIndex = states.index(state)
     blurb = INTERESTS[stateIndex]
     # Compute totals for each column
@@ -145,7 +145,7 @@ def state_page(state):
         totals = [sum(col) for col in zip(*data)]
     else:
         totals = [0] * len(states)
-    return render_template('state.html', state=stateIndex, data=return_data, blurb=blurb, totals=totals)
+    return render_template('state.html', state=stateIndex, states=states, data=data, blurb=blurb, totals=totals)
 
 # Define routes for each state
 @app.route('/ny')

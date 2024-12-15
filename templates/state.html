@@ -17,19 +17,18 @@
         </p>
         <br>
         <table id="dataTable">
+            <tr>
+                <th></th>
+                {% for state_name in states %}
+                    <th>{{ state_name }}</th>
+                {% endfor %}
+            </tr>
             {% for row in data %}
             <tr>
-                {% if loop.first %}
-                    <th></th>
-                    {% for item in row %}
-                    <th>{{ item }}</th>
-                    {% endfor %}
-                {% else %}
-                    <th>R{{ loop.index0 }}</th>
-                    {% for item in row %}
-                    <td>{{ item }}</td>
-                    {% endfor %}
-                {% endif %}
+                <th>R{{ loop.index }}</th>
+                {% for item in row %}
+                <td>{{ item }}</td>
+                {% endfor %}
             </tr>
             {% endfor %}
             <tr class="totals-row">
