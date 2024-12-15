@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Congratulations</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0"></script>
+</head>
+<body>
+    <div class="confetti-container">
+        <canvas id="confetti-canvas"></canvas>
+        <div class="congrats-content">
+            <div class="winner-card">
+                <h1>Congratulations!</h1>
+                <div class="winner-details">
+                    <img src="/static/images/trophy.png" alt="Trophy" class="trophy-image">
+                    <p class="winner-message">Champion of the Game</p>
+                    <p class="winner-name">Winner: <span id="winnerName">Player Name</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/static/js/congratulations.js"></script>
+</body>
+</html>

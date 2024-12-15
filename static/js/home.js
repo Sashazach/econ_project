@@ -59,12 +59,13 @@ $(document).ready(function() {
     $('#beginRound4Button').click(function() {
         socket.emit('begin_round', 4);
     });
-    $('#beginRound5Button').click(function() {
-        socket.emit('begin_round', 5);
-    });
 
     $('#pauseButton').click(function() {
         socket.emit('toggle_pause');
+    });
+
+    $('#submitAgreementButton').click(function() {
+        socket.emit('submit_agreement');
     });
 
     // Set initial phase
@@ -84,6 +85,10 @@ $(document).ready(function() {
         } else {
             $('#pauseButton').text('Pause');
         }
+    });
+
+    socket.on('redirect', (data) => {
+        window.location.href = data.url;
     });
 });
 

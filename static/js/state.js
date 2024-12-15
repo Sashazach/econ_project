@@ -141,6 +141,10 @@ function initiateConnection() {
         }, 3000);
     });
 
+    socket.on('redirect', (data) => {
+        window.location.href = data.url;
+    });
+
     function approveFunction(state) {
         console.log('Approve button clicked with state:', state);
         socket.emit('approval_granted', state);

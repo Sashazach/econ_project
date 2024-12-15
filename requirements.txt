@@ -4,3 +4,4 @@ openai==1.57.3
 Werkzeug==2.2.2
 gunicorn
 eventlet
+canvas-confetti==1.6.0

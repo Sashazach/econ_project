@@ -447,3 +447,170 @@ tr:hover td {
 tr:hover td.highest-total {
     background-color: #45a049 !important;
 }
+
+/* Styles for the congratulations page */
+.congrats-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background: linear-gradient(135deg, #f9f9f9 0%, #e0e0e0 100%);
+    text-align: center;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+.congrats-container h1 {
+    font-size: 48px;
+    color: #4CAF50;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.winner-message {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+    font-weight: 300;
+}
+
+.winner-details {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 30px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.trophy-image {
+    width: 150px;
+    height: auto;
+    margin-bottom: 20px;
+    transition: transform 0.3s;
+}
+
+.trophy-image:hover {
+    transform: scale(1.1);
+}
+
+.winner-name {
+    font-size: 20px;
+    color: #333;
+    font-weight: bold;
+}
+
+.play-again-button {
+    padding: 15px 30px;
+    font-size: 18px;
+    color: #fff;
+    background-color: #4CAF50;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.play-again-button:hover {
+    background-color: #45a049;
+}
+
+/* Updated styles for the congratulations page */
+.confetti-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(135deg, #1a1f71 0%, #2d46b9 100%);
+    overflow: hidden;
+}
+
+#confetti-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.congrats-content {
+    position: relative;
+    z-index: 2;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.winner-card {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 3rem;
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    max-width: 600px;
+    width: 90%;
+    backdrop-filter: blur(10px);
+    animation: cardFloat 3s ease-in-out infinite;
+}
+
+@keyframes cardFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+}
+
+.winner-card h1 {
+    font-size: 4rem;
+    margin-bottom: 2rem;
+    background: linear-gradient(45deg, #4CAF50, #45a049);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: none;
+}
+
+.winner-details {
+    background: none;
+    box-shadow: none;
+}
+
+.trophy-image {
+    width: 180px;
+    height: auto;
+    margin: 2rem 0;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+    animation: trophyGlow 2s ease-in-out infinite;
+}
+
+@keyframes trophyGlow {
+    0%, 100% { filter: drop-shadow(0 0 15px rgba(76, 175, 80, 0.6)); }
+    50% { filter: drop-shadow(0 0 30px rgba(76, 175, 80, 0.8)); }
+}
+
+.winner-message {
+    font-size: 1.8rem;
+    color: #666;
+    margin: 1rem 0;
+    font-weight: 300;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.winner-name {
+    font-size: 2.2rem;
+    color: #333;
+    font-weight: bold;
+    margin-top: 1rem;
+}
+
+#winnerName {
+    color: #4CAF50;
+    border-bottom: 2px solid #4CAF50;
+    padding-bottom: 5px;
+}

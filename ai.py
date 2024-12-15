@@ -21,7 +21,7 @@ def analyzeAgreement(topic, compromise):
     sanitized_compromise = sanitize_compromise(compromise)
     
     completion = client.chat.completions.create(
-        model="o1-mini",
+        model="4o",
         messages=[
             {
                 "role": "user",

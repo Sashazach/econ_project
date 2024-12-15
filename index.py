@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, redirect, url_for
 from flask_socketio import SocketIO, emit
 import secrets
 import threading
@@ -36,7 +36,6 @@ round_phases = {
     2: [("Opening Statements", 20), ("Discussion", 30), ("Voting", 25)],
     3: [("Opening Statements", 15), ("Discussion", 15), ("Voting", 20)],
     4: [("Opening Statements", 20), ("Discussion", 30), ("Voting", 25)],
-    5: [("Opening Statements", 20), ("Discussion", 30), ("Voting", 25)],
 }
 
 def run_round(round : int):
@@ -65,9 +64,14 @@ def handle_submit_agreement():
         return
     
     for i, point in enumerate(points):
-        data[roundIndex][i] += point
+        data[roundIndex-1][i] += point
     
     emit('data_update', {'data': data}, broadcast=True)
+
+    # Check if the current round is the last round (roundIndex 4)
+    if roundIndex == 4:
+        send_notification("Game over! Redirecting to the congratulations screen...")
+        emit('redirect', {'url': url_for('congratulations')}, broadcast=True)
 
 def send_notification(message):
     emit('show_notification', {'message': message}, broadcast=True)
@@ -133,9 +137,17 @@ def handle_verify_password(data):
     else:
         emit('password_verification', {'success': False})
 
+@socketio.on('submit_agreement')
+def handle_submit_agreement_event():
+    handle_submit_agreement()
+
 @app.route('/')
 def home():
     return render_template('home.html')
+
+@app.route('/congratulations')
+def congratulations():
+    return render_template('congratulations.html')
 
 def state_page(state):
     stateIndex = states.index(state)
