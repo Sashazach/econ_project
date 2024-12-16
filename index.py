@@ -18,7 +18,7 @@ socketio = SocketIO(app, cors_allowed_origins="*", async_mode='threading')
 
 stateNames = ["New York", "Massachusetts", "Georgia", "South Carolina", "Pennsylvania", "Virginia"];
 states = ['ny', 'ma', 'ga', 'sc', 'pa', 'va']
-round_topics = ["Export Law", "Healthcare", "Education", "Infrastructure", "Climate Change"]
+round_topics = ["Representation", "Trade Regulation", "Taxation", "Federal Control"]
 
 ADMIN_PASSWORD = "Econ"
 
@@ -33,10 +33,10 @@ round_running = False  # Add a flag to track if a round is running
 paused = False  # Add a flag to track if the round is paused
 
 round_phases = {
-    0: [("Opening Statements", 15), ("Discussion", 15), ("Voting", 20)],
-    1: [("Opening Statements", 20), ("Discussion", 30), ("Voting", 25)],
-    2: [("Opening Statements", 15), ("Discussion", 15), ("Voting", 20)],
-    3: [("Opening Statements", 20), ("Discussion", 30), ("Voting", 25)],
+    0: [("Opening Statements", 30), ("Discussion", 15), ("Voting", 20)],
+    1: [("Opening Statements", 30), ("Discussion", 15), ("Voting", 20)],
+    2: [("Opening Statements", 30), ("Discussion", 15), ("Voting", 20)],
+    3: [("Opening Statements", 30), ("Discussion", 15), ("Voting", 20)],
 }
 
 def run_round(round : int):
