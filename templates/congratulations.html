@@ -11,16 +11,37 @@
     <div class="confetti-container">
         <canvas id="confetti-canvas"></canvas>
         <div class="congrats-content">
-            <div class="winner-card">
-                <h1>Congratulations!</h1>
-                <div class="winner-details">
-                    <img src="/static/images/trophy.png" alt="Trophy" class="trophy-image">
-                    <p class="winner-message">Champion of the Game</p>
-                    <p class="winner-name">Winner(s): <span id="winnerName">{{winner}}</span></p>
+            <div class="congrats-wrapper">
+                <div class="winner-card">
+                    <h1>Congratulations!</h1>
+                    <div class="winner-details">
+                        <img src="/static/images/trophy.png" alt="Trophy" class="trophy-image">
+                        <p class="winner-message">Champion of the Game</p>
+                        <p class="winner-name">Winner(s): <span id="winnerName"></span></p>
+                    </div>
+                </div>
+                <div class="results-table">
+                    <h2>Final Results</h2>
+                    <table id="gameResults">
+                        <thead>
+                            <tr>
+                                <th>State</th>
+                                <th>Round 1</th>
+                                <th>Round 2</th>
+                                <th>Round 3</th>
+                                <th>Round 4</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Data will be populated by JavaScript -->
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
+    <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
     <script src="/static/js/congratulations.js"></script>
 </body>
 </html>

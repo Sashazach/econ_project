@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for
+from flask import Flask, render_template, redirect, url_for, request
 from flask_socketio import SocketIO, emit
 import secrets
 import threading
@@ -77,6 +77,30 @@ def handle_submit_agreement():
 def send_notification(message):
     emit('show_notification', {'message': message}, broadcast=True)
 
+@socketio.on('request_congrats_data')
+def handle_request_congrats_data():
+    # Format data into a dictionary with state names as keys
+    formatted_data = {}
+    for i, state in enumerate(stateNames):
+        formatted_data[state] = {
+            1: data[0][i],
+            2: data[1][i],
+            3: data[2][i],
+            4: data[3][i]
+        }
+
+    highest_total_indices = get_highest_total_column()
+    winner_names = format_highest_total_columns(highest_total_indices)
+    
+    response_data = {
+        'gameData': formatted_data,
+        'winner': winner_names
+    }
+    
+    print(data)
+    print("Sending data:", response_data)  # Debug print
+    emit('congrats_data', response_data)
+
 @socketio.on('begin_round')
 def handle_begin_round(round: int):
     send_notification(f"Round {round} has started.")
@@ -147,7 +171,7 @@ def home():
 
 @app.route('/congratulations')
 def congratulations():
-    return render_template('congratulations.html', winner=format_highest_total_columns(get_highest_total_column()))
+    return render_template('congratulations.html')
 
 def state_page(state):
     stateIndex = states.index(state)
