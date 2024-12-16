@@ -1,5 +1,6 @@
 .title {
     text-align: center;
+    padding-top: 50px;
     color: black;
     font-size: 35px;
     font-family: "Open Sans", sans-serif;
@@ -432,7 +433,7 @@ a {
 
 .highest-total {
     background-color: #fff176 !important; /* Softer yellow for the highest total */
-    color: white;
+    color: black;
     font-weight: bold;
 }
 

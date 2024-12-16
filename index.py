@@ -148,11 +148,12 @@ def handle_text_update(data):
 def handle_approval_granted(state):
     state_approvals[int(state)] = True
     print(state_approvals)
+    emit('approval_granted', {'data': state_approvals}, broadcast=True)
     if all(state_approvals):
         for i in range(len(state_approvals)):
             state_approvals[i] = False
         handle_submit_agreement()
-    emit('approval_granted', {'data': state_approvals}, broadcast=True)
+    
 
 @socketio.on('request_approval_data')
 def handle_request_approval_data():
