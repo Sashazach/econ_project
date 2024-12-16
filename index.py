@@ -33,10 +33,10 @@ round_running = False  # Add a flag to track if a round is running
 paused = False  # Add a flag to track if the round is paused
 
 round_phases = {
-    0: [("Opening Statements", 30), ("Discussion", 15), ("Voting", 20)],
-    1: [("Opening Statements", 30), ("Discussion", 15), ("Voting", 20)],
-    2: [("Opening Statements", 30), ("Discussion", 15), ("Voting", 20)],
-    3: [("Opening Statements", 30), ("Discussion", 15), ("Voting", 20)],
+    0: [("Team Thinking Time", 60), ("Present ideas", 180), ("Draft Agreement", 200), ("Final Decisions", 30)],
+    1: [("Team Thinking Time", 60), ("Present ideas", 180), ("Draft Agreement", 200), ("Final Decisions", 30)],
+    2: [("Team Thinking Time", 60), ("Present ideas", 180), ("Draft Agreement", 200), ("Final Decisions", 30)],
+    3: [("Team Thinking Time", 60), ("Present ideas", 180), ("Draft Agreement", 200), ("Final Decisions", 30)],
 }
 
 def run_round(round : int):
