@@ -46,7 +46,7 @@ def analyzeAgreement(topic, compromise):
 Based on the above information, assign points to each of the six teams according to how much they benefit from the agreed compromise. Output the points as a comma-separated list without any spaces or additional text. Points should add up to 20 every time."""
     print(prompt)
     completion = client.chat.completions.create(
-        model="gpt-4o",
+        model="o1-mini",
         messages=[
             {
                 "role": "user",

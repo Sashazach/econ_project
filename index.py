@@ -57,7 +57,7 @@ def run_round(round : int):
     round_running = False
 
 def handle_submit_agreement():
-    send_notification("Agreement submitted. Making API call...")
+    send_notification("Agreement submitted. Analyzing...")
     points = analyzeAgreement(round_topics[roundIndex], current_text)
     send_notification("Agreement evaluated. Updating scores...")
     if len(points) != len(states):
@@ -98,8 +98,7 @@ def handle_request_congrats_data():
     }
     
     print(data)
-    print("Sending data:", response_data)  # Debug print
-    emit('congrats_data', response_data)
+    emit('congrats_data', response_data, to=request.sid)
 
 @socketio.on('begin_round')
 def handle_begin_round(round: int):
@@ -127,7 +126,7 @@ def handle_message(message):
 
 @socketio.on('request_phase_update')
 def handle_request_phase_update():
-    emit('phase_update', {'phase': current_phase, 'time_remaining': time_remaining})
+    emit('phase_update', {'phase': current_phase, 'time_remaining': time_remaining}, to=request.sid)
 
 @socketio.on('connect')
 def handle_connect():
@@ -143,6 +142,7 @@ def handle_text_update(data):
     emit('text_update', data, broadcast=True, include_self=False)
     for i in range(len(state_approvals)):
         state_approvals[i] = False
+    emit('approval_granted', {'data': state_approvals}, broadcast=True)
 
 @socketio.on('approval_granted')
 def handle_approval_granted(state):
@@ -152,6 +152,11 @@ def handle_approval_granted(state):
         for i in range(len(state_approvals)):
             state_approvals[i] = False
         handle_submit_agreement()
+    emit('approval_granted', {'data': state_approvals}, broadcast=True)
+
+@socketio.on('request_approval_data')
+def handle_request_approval_data():
+    emit('approval_granted', {'data': state_approvals}, to=request.sid)
 
 @socketio.on('verify_password')
 def handle_verify_password(data):

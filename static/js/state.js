@@ -1,6 +1,7 @@
 var socket = io();
 
 const STATES = ["New York", "Massachusetts", "Georgia", "South Carolina", "Pennsylvania", "Virginia"];
+const states = ['ny', 'ma', 'ga', 'sc', 'pa', 'va']
 
 $(window).bind("pageshow", function (event) {
     if (event.originalEvent.persisted) {
@@ -70,26 +71,28 @@ function updateDataTable(data) {
     totalHeader.textContent = 'Total';
 
     // Calculate and update totals
-    const columnCount = dataRows[0].length;
-    let maxTotal = -Infinity;
-    let totals = new Array(columnCount).fill(0);
+    if (dataRows.length > 0) {
+        const columnCount = dataRows[0].length;
+        let maxTotal = -Infinity;
+        let totals = new Array(columnCount).fill(0);
 
-    // Calculate totals for each column
-    for (let col = 0; col < columnCount; col++) {
-        totals[col] = dataRows.reduce((sum, row) => sum + Number(row[col]), 0);
-        maxTotal = Math.max(maxTotal, totals[col]);
-    }
-
-    // Update totals cells
-    totals.forEach((total, colIndex) => {
-        let td = totalsRow.children[colIndex + 1];
-        if (!td) {
-            td = document.createElement('td');
-            totalsRow.appendChild(td);
+        // Calculate totals for each column
+        for (let col = 0; col < columnCount; col++) {
+            totals[col] = dataRows.reduce((sum, row) => sum + Number(row[col]), 0);
+            maxTotal = Math.max(maxTotal, totals[col]);
         }
-        td.textContent = total;
-        td.className = total === maxTotal ? 'highest-total' : '';
-    });
+
+        // Update totals cells
+        totals.forEach((total, colIndex) => {
+            let td = totalsRow.children[colIndex + 1];
+            if (!td) {
+                td = document.createElement('td');
+                totalsRow.appendChild(td);
+            }
+            td.textContent = total;
+            td.className = total === maxTotal ? 'highest-total' : '';
+        });
+    }
 }
 
 function initiateConnection() {
@@ -101,6 +104,7 @@ function initiateConnection() {
     socket.on('connect', () => {
         console.log('Successfully connected to the server');
         socket.emit('request_phase_update');
+        socket.emit('request_approval_data');
     });
 
     socket.on('connect_error', (err) => {
@@ -152,8 +156,11 @@ function initiateConnection() {
         window.location.href = data.url;
     });
 
+    socket.on('approval_granted', (data) => {
+        handleStateApproval(data.data);
+    });
+
     function approveFunction(state) {
-        console.log('Approve button clicked with state:', state);
         socket.emit('approval_granted', state);
     }
 
@@ -162,6 +169,19 @@ function initiateConnection() {
     const agreementBox = document.getElementById('agreementBox');
     agreementBox.addEventListener('input', () => {  
         socket.emit('text_update', { text: agreementBox.value });
+    });
+}
+
+function handleStateApproval(approvalStates) {    
+    // Update each state's segment based on the approval array
+    console.log(approvalStates);
+    states.forEach((state, index) => {
+        const stateSegment = document.getElementById(`approval-${state}`);
+        if (stateSegment) {
+            stateSegment.classList.remove('pending', 'approved');
+            stateSegment.classList.add(approvalStates[index] ? 'approved' : 'pending');
+            stateSegment.textContent = `${STATES[index]}: ${approvalStates[index] ? 'Approved' : 'Pending'}`;
+        }
     });
 }
 

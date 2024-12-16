@@ -45,10 +45,21 @@
         </table>
         <br>
 
+        <div id="approvalTracker" class="approval-tracker">
+            <h3>Approval Tracker</h3>
+            <div class="approval-progress-bar">
+                {% for state in states %}
+                    <div id="approval-{{ state }}" class="approval-segment pending" style="width: {{ 100 / states|length }}%">
+                        {{ state }}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
         <div class="agreement-box">
             <textarea id="agreementBox" placeholder="Begin drafting your agreement here" class="agreement"></textarea>
             <button class="approveButton" id="approveButton" onclick="approveFunction('{{state}}')">Approve</button>
         </div>
+
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
         <script src="/static/js/state.js"></script>

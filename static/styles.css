@@ -426,15 +426,12 @@ a {
 /* Add these new styles */
 .totals-row {
     font-weight: bold;
-    background-color: #f8f8f8 !important;
-}
-
-.totals-row th {
-    background-color: #45a049;
+    background-color: #fff9c4 !important; /* Softer yellow background color */
+    color: black; /* Ensure text color is black */
 }
 
 .highest-total {
-    background-color: #4CAF50 !important;
+    background-color: #fff176 !important; /* Softer yellow for the highest total */
     color: white;
     font-weight: bold;
 }
@@ -662,4 +659,41 @@ tr:hover td.highest-total {
         padding: 0.5rem;
         font-size: 0.8rem;
     }
+}
+
+/* Add these new styles */
+.approval-tracker {
+    width: 80%;
+    margin: 20px auto;
+    text-align: center;
+}
+
+.approval-progress-bar {
+    display: flex;
+    height: 30px;
+    background-color: #f2f2f2;
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.approval-segment {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    color: white;
+    transition: background-color 0.3s;
+}
+
+.approval-segment.pending {
+    background-color: #ccc;
+}
+
+.approval-segment.approved {
+    background-color: #4CAF50;
+}
+
+.approval-segment.rejected {
+    background-color: #f44336;
 }
