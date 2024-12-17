@@ -18,7 +18,8 @@ socketio = SocketIO(app, cors_allowed_origins="*", async_mode='threading')
 
 stateNames = ["New York", "Massachusetts", "Georgia", "South Carolina", "Pennsylvania", "Virginia"];
 states = ['ny', 'ma', 'ga', 'sc', 'pa', 'va']
-round_topics = ["Representation", "Trade Regulation", "Taxation", "Federal Control"]
+round_topics = ["Should the Electoral College exist or should it be a popular vote?", "Should slaves be counted in population data; therefore impacting state representation in Congress?", "Should we tax imports and exports, if yes, how so?", "How much control should the federal government have on trade and tariffs?", "Should the federal government take care of (“bail out”) the individual states’ war debts?"]
+topic_names = []
 
 ADMIN_PASSWORD = "Econ"
 
