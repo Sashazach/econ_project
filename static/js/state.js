@@ -137,6 +137,8 @@ function initiateConnection() {
     });
 
     socket.on('data_update', (data) => {
+        console.log("recieved data update")
+        console.log(data)
         updateDataTable(data.data);
     });
 

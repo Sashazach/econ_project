@@ -24,20 +24,20 @@ ADMIN_PASSWORD = "Econ"
 
 data = [[0 for _ in states] for _ in range(4)]
 
-global current_text
-current_text = ""
+current_text = " "
 
 current_phase = "Waiting for round to start."
 time_remaining = 0
 round_running = False  # Add a flag to track if a round is running
 paused = False  # Add a flag to track if the round is paused
+inconclusive_rounds = 0
 
 round_phases = {
-    0: [("Team Thinking Time", 60), ("Present ideas", 180), ("Draft Agreement", 200), ("Final Decisions", 30)],
-    1: [("Team Thinking Time", 60), ("Present ideas", 180), ("Draft Agreement", 200), ("Final Decisions", 30)],
+    0: [("Team Thinking Time", 15), ("Present ideas", 5), ("Draft Agreement", 5), ("Final Decisions", 5)],
+    1: [("Team Thinking Time", 15), ("Present ideas", 5), ("Draft Agreement", 5), ("Final Decisions", 15)],
     2: [("Team Thinking Time", 60), ("Present ideas", 180), ("Draft Agreement", 200), ("Final Decisions", 30)],
     3: [("Team Thinking Time", 60), ("Present ideas", 180), ("Draft Agreement", 200), ("Final Decisions", 30)],
-}
+}    
 
 def run_round(round : int):
     global current_phase, time_remaining, round_running, paused, roundIndex
@@ -51,11 +51,25 @@ def run_round(round : int):
                 socketio.emit('phase_update', {'phase': current_phase, 'time_remaining': time_remaining})
                 time_remaining -= 1
             time.sleep(1)
+    end_round(round)
+
+def reset_scores():
+    global data 
+    data = [[0 for _ in states] for _ in range(4)]
+    emit('data_update', {'data': data})
+
+def end_round(round):
     current_phase = "Round Ended."
     time_remaining = 0
     socketio.emit('phase_update', {'phase': current_phase, 'time_remaining': time_remaining})
+    global round_running, current_text, state_approvals
     round_running = False
-
+    current_text = " "
+    socketio.emit('text_update', data)
+    for i in range(len(state_approvals)):
+        state_approvals[i] = False
+    socketio.emit('approval_granted', {'data': state_approvals})
+        
 def handle_submit_agreement():
     send_notification("Agreement submitted. Analyzing...")
     points = analyzeAgreement(round_topics[roundIndex], current_text)
@@ -103,7 +117,6 @@ def handle_request_congrats_data():
 @socketio.on('begin_round')
 def handle_begin_round(round: int):
     send_notification(f"Round {round} has started.")
-    global roundIndex, round_running
     roundIndex = round-1
     if not round_running:
         for i in range(len(state_approvals)):
@@ -132,7 +145,7 @@ def handle_request_phase_update():
 def handle_connect():
     emit('text_update', {'text': current_text})
     emit('phase_update', {'phase': current_phase, 'time_remaining': time_remaining})
-    emit('data_update', {'data': data})
+    emit('data_update', {'data': data}, to=request.sid)
     print("A new client has connected. Current text and phase sent.")
     
 @socketio.on('text_update')
