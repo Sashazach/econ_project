@@ -3,7 +3,7 @@ from flask_socketio import SocketIO, emit
 import secrets
 import threading
 import time
-from interests import INTERESTS
+from interests import BLURBS
 from ai import analyzeAgreement  # Import the analyzeAgreement function
 
 state_approvals = [False, False, False, False, False, False]
@@ -195,7 +195,7 @@ def congratulations():
 
 def state_page(state):
     stateIndex = states.index(state)
-    blurb = INTERESTS[stateIndex]
+    blurb = BLURBS[stateIndex]
     # Compute totals for each column
     if data:
         totals = [sum(col) for col in zip(*data)]
