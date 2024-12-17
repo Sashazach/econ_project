@@ -698,3 +698,24 @@ tr:hover td.highest-total {
 .approval-segment.rejected {
     background-color: #f44336;
 }
+
+/* Add these new styles */
+.topic-info {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    display: flex;
+    align-items: center;
+    padding: 15px 30px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 20px;
+    font-family: "Open Sans", sans-serif;
+}
+
+.topic-info span {
+    font-size: 20px;
+    color: #333;
+    font-weight: bold;
+    color: #4CAF50;
+}

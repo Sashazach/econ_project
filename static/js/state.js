@@ -13,86 +13,48 @@ $(window).bind("pageshow", function (event) {
     }
 });
 
-$(document).ready(initiateConnection);
+$(document).ready(function() {
+    initiateConnection();
+});
 
 function updateDataTable(data) {
-    console.log(data);
-    // Skip the first row of data (headers)
-    const dataRows = data.filter(row => row.some(val => val !== 0));
-    const table = document.getElementById('dataTable');
-    
-    // Update only the data rows that have non-zero values
-    dataRows.forEach((row, rowIndex) => {
-        // Skip row 1 if it already exists
-        if (rowIndex === 0 && table.querySelector('tr:nth-child(2)')) {
-            return;
-        }
-
-        // Find existing row or create new one
-        let tr = table.querySelector(`tr:nth-child(${rowIndex + 2})`);
-        if (!tr) {
-            tr = document.createElement('tr');
-            table.appendChild(tr);
-        }
-        
-        // Add/update round header (R1, R2, etc.)
-        let roundHeader = tr.querySelector('th');
-        if (!roundHeader) {
-            roundHeader = document.createElement('th');
-            tr.appendChild(roundHeader);
-        }
-        roundHeader.textContent = `R${rowIndex + 1}`;
-        
-        // Update data cells
-        row.forEach((item, colIndex) => {
-            let td = tr.children[colIndex + 1];
-            if (!td) {
-                td = document.createElement('td');
-                tr.appendChild(td);
-            }
-            td.textContent = item;
-        });
-    });
-
-    // Add totals row
-    let totalsRow = document.querySelector('#dataTable tr.totals-row');
-    if (!totalsRow) {
-        totalsRow = document.createElement('tr');
-        totalsRow.className = 'totals-row';
-        document.getElementById('dataTable').appendChild(totalsRow);
+    // Clear existing data rows first
+    const dataRows = $('#dataTable tr').length - 2;  // Subtract header and totals row
+    while ($('#dataTable tr').length > 2) {  // Keep header and totals row
+        $('#dataTable tr:eq(1)').remove();
     }
 
-    // Add "Total" header cell
-    let totalHeader = totalsRow.querySelector('th');
-    if (!totalHeader) {
-        totalHeader = document.createElement('th');
-        totalsRow.appendChild(totalHeader);
+    // Add rows for all rounds
+    for (let i = 0; i < data.length; i++) {
+        const newRow = $('<tr>');
+        newRow.append($(`<th>R${i + 1}</th>`));
+        
+        for (let j = 0; j < data[i].length; j++) {
+            newRow.append($(`<td>${data[i][j]}</td>`));
+        }
+        
+        $('#dataTable tr:last').before(newRow);
     }
-    totalHeader.textContent = 'Total';
 
     // Calculate and update totals
-    if (dataRows.length > 0) {
-        const columnCount = dataRows[0].length;
-        let maxTotal = -Infinity;
-        let totals = new Array(columnCount).fill(0);
-
-        // Calculate totals for each column
-        for (let col = 0; col < columnCount; col++) {
-            totals[col] = dataRows.reduce((sum, row) => sum + Number(row[col]), 0);
-            maxTotal = Math.max(maxTotal, totals[col]);
+    const totals = Array(data[0].length).fill(0);
+    for (let j = 0; j < data[0].length; j++) {
+        for (let i = 0; i < data.length; i++) {
+            totals[j] += data[i][j];
         }
-
-        // Update totals cells
-        totals.forEach((total, colIndex) => {
-            let td = totalsRow.children[colIndex + 1];
-            if (!td) {
-                td = document.createElement('td');
-                totalsRow.appendChild(td);
-            }
-            td.textContent = total;
-            td.className = total === maxTotal ? 'highest-total' : '';
-        });
     }
+
+    // Update total row
+    const maxTotal = Math.max(...totals);
+    totals.forEach((total, index) => {
+        const totalCell = $(`#dataTable tr:last td:eq(${index})`);
+        totalCell.text(total);
+        if (total === maxTotal) {
+            totalCell.addClass('highest-total');
+        } else {
+            totalCell.removeClass('highest-total');
+        }
+    });
 }
 
 function initiateConnection() {
@@ -105,6 +67,7 @@ function initiateConnection() {
         console.log('Successfully connected to the server');
         socket.emit('request_phase_update');
         socket.emit('request_approval_data');
+        socket.emit('request_topic_update');
     });
 
     socket.on('connect_error', (err) => {
@@ -136,10 +99,10 @@ function initiateConnection() {
         }
     });
 
-    socket.on('data_update', (data) => {
-        console.log("recieved data update")
-        console.log(data)
-        updateDataTable(data.data);
+    socket.on('data_update', function(msg) {
+        if (msg.data) {
+            updateDataTable(msg.data);
+        }
     });
 
     socket.on('show_notification', (data) => {
@@ -160,6 +123,13 @@ function initiateConnection() {
 
     socket.on('approval_granted', (data) => {
         handleStateApproval(data.data);
+    });
+
+    socket.on('topic_update', (data) => {
+        const currentTopic = document.getElementById('currentTopic');
+        if (currentTopic) {
+            currentTopic.textContent = data.topic;
+        }
     });
 
     function approveFunction(state) {

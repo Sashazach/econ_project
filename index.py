@@ -8,8 +8,9 @@ from ai import analyzeAgreement  # Import the analyzeAgreement function
 
 state_approvals = [False, False, False, False, False, False]
 
-global roundIndex
 roundIndex = 0
+
+collective_failures = 0
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = secrets.token_urlsafe(32)
@@ -19,11 +20,11 @@ socketio = SocketIO(app, cors_allowed_origins="*", async_mode='threading')
 stateNames = ["New York", "Massachusetts", "Georgia", "South Carolina", "Pennsylvania", "Virginia"];
 states = ['ny', 'ma', 'ga', 'sc', 'pa', 'va']
 round_topics = ["Should the Electoral College exist or should it be a popular vote?", "Should slaves be counted in population data; therefore impacting state representation in Congress?", "Should we tax imports and exports, if yes, how so?", "How much control should the federal government have on trade and tariffs?", "Should the federal government take care of (“bail out”) the individual states’ war debts?"]
-topic_names = []
+topic_names = ["Electoral College or Popular Vote?", "Slaves in Population Data", "Taxing Imports and Exports", "Federal Government Control on Trade", "Federal Government Bail out War Debt"]
 
 ADMIN_PASSWORD = "Econ"
 
-data = [[0 for _ in states] for _ in range(4)]
+data = [[0 for _ in states] for _ in range(5)]
 
 current_text = " "
 
@@ -34,10 +35,11 @@ paused = False  # Add a flag to track if the round is paused
 inconclusive_rounds = 0
 
 round_phases = {
-    0: [("Team Thinking Time", 15), ("Present ideas", 5), ("Draft Agreement", 5), ("Final Decisions", 5)],
-    1: [("Team Thinking Time", 15), ("Present ideas", 5), ("Draft Agreement", 5), ("Final Decisions", 15)],
+    0: [("Team Thinking Time", 60), ("Present ideas", 5), ("Draft Agreement", 5), ("Final Decisions", 5)],
+    1: [("Team Thinking Time", 60), ("Present ideas", 5), ("Draft Agreement", 5), ("Final Decisions", 15)],
     2: [("Team Thinking Time", 60), ("Present ideas", 180), ("Draft Agreement", 200), ("Final Decisions", 30)],
     3: [("Team Thinking Time", 60), ("Present ideas", 180), ("Draft Agreement", 200), ("Final Decisions", 30)],
+    4: [("Team Thinking Time", 60), ("Present ideas", 180), ("Draft Agreement", 200), ("Final Decisions", 30)],
 }    
 
 def run_round(round : int):
@@ -48,23 +50,31 @@ def run_round(round : int):
         current_phase = phase
         time_remaining = duration
         while time_remaining > 0:
+            if not round_running:  # Check if the round is still running
+                return
             if not paused:
                 socketio.emit('phase_update', {'phase': current_phase, 'time_remaining': time_remaining})
                 time_remaining -= 1
             time.sleep(1)
-    end_round(round)
+    end_round()
 
 def reset_scores():
     global data 
-    data = [[0 for _ in states] for _ in range(4)]
+    data = [[0 for _ in states] for _ in range(5)]
     emit('data_update', {'data': data})
 
-def end_round(round):
+def end_round(mode="normal"):
+    global round_running, current_text, state_approvals, collective_failures
+    if mode != "exited by force":
+        collective_failures += 1
+        if collective_failures >= 2:
+            send_notification("Two rounds have been inconclusive. Redirecting to the congratulations screen...")
+            emit('redirect', {'url': url_for('congratulations')}, broadcast=True)
+            return
+    round_running = False  # Ensure the round stops running
     current_phase = "Round Ended."
     time_remaining = 0
     socketio.emit('phase_update', {'phase': current_phase, 'time_remaining': time_remaining})
-    global round_running, current_text, state_approvals
-    round_running = False
     current_text = " "
     socketio.emit('text_update', data)
     for i in range(len(state_approvals)):
@@ -72,6 +82,10 @@ def end_round(round):
     socketio.emit('approval_granted', {'data': state_approvals})
         
 def handle_submit_agreement():
+    if not current_text or current_text.isspace():
+        send_notification("Error: Agreement text cannot be empty!")
+        return
+        
     send_notification("Agreement submitted. Analyzing...")
     points = analyzeAgreement(round_topics[roundIndex], current_text)
     send_notification("Agreement evaluated. Updating scores...")
@@ -82,10 +96,11 @@ def handle_submit_agreement():
     for i, point in enumerate(points):
         data[roundIndex][i] += point
     
-    emit('data_update', {'data': data}, broadcast=True)
+    emit('data_update', {'data': data})
+    end_round()
 
     # Check if the current round is the last round (roundIndex 4)
-    if roundIndex == 3:
+    if roundIndex == 4:
         send_notification("Game over! Redirecting to the congratulations screen...")
         emit('redirect', {'url': url_for('congratulations')}, broadcast=True)
 
@@ -101,7 +116,8 @@ def handle_request_congrats_data():
             1: data[0][i],
             2: data[1][i],
             3: data[2][i],
-            4: data[3][i]
+            4: data[3][i],
+            5: data[4][i]
         }
 
     highest_total_indices = get_highest_total_column()
@@ -111,14 +127,13 @@ def handle_request_congrats_data():
         'gameData': formatted_data,
         'winner': winner_names
     }
-    
-    print(data)
     emit('congrats_data', response_data, to=request.sid)
 
 @socketio.on('begin_round')
 def handle_begin_round(round: int):
     send_notification(f"Round {round} has started.")
     roundIndex = round-1
+    emit('topic_update', {'topic': topic_names[roundIndex]}, to=request.sid)
     if not round_running:
         for i in range(len(state_approvals)):
             state_approvals[i] = False
@@ -160,14 +175,13 @@ def handle_text_update(data):
 
 @socketio.on('approval_granted')
 def handle_approval_granted(state):
-    state_approvals[int(state)] = True
-    print(state_approvals)
-    emit('approval_granted', {'data': state_approvals}, broadcast=True)
-    if all(state_approvals):
-        for i in range(len(state_approvals)):
-            state_approvals[i] = False
-        handle_submit_agreement()
-    
+    if round_running:
+        state_approvals[int(state)] = True
+        emit('approval_granted', {'data': state_approvals}, broadcast=True)
+        if state_approvals.count(True) >= 5:
+            for i in range(len(state_approvals)):
+                state_approvals[i] = False
+            handle_submit_agreement()
 
 @socketio.on('request_approval_data')
 def handle_request_approval_data():
@@ -184,6 +198,37 @@ def handle_verify_password(data):
 @socketio.on('submit_agreement')
 def handle_submit_agreement_event():
     handle_submit_agreement()
+
+@socketio.on('request_topic_update')
+def handle_request_topic_update():
+    if roundIndex < len(round_topics):
+        emit('topic_update', {'topic': topic_names[roundIndex]}, to=request.sid)
+    else:
+        print("No more topics available.")
+        emit('topic_update', {'topic': 'No topic available'}, to=request.sid)
+
+@socketio.on('reset_scores')
+def handle_reset_scores():
+    reset_scores()
+    send_notification("Scores have been reset.")
+
+@socketio.on('exit_round')
+def handle_exit_round():
+    send_notification("The current round has been exited.")
+    end_round("exited by force")
+
+@socketio.on('adjust_failures')
+def handle_adjust_failures(data):
+    global collective_failures
+    new_failures = data.get('failures', collective_failures)
+    if isinstance(new_failures, int) and new_failures >= 0:
+        collective_failures = new_failures
+        send_notification(f"Collective failures adjusted to {collective_failures}.")
+    else:
+        send_notification("Invalid value for collective failures.")
+    if collective_failures >= 2:
+        send_notification("Two rounds have been inconclusive. Redirecting to the congratulations screen...")
+        emit('redirect', {'url': url_for('congratulations')}, broadcast=True)
 
 @app.route('/')
 def home():

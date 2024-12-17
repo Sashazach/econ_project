@@ -7,6 +7,9 @@
     <link rel="styleSheet" href="/static/styles.css">
 </head>
 <body>    
+    <div id="topic-info" class="topic-info">
+        <span id="currentTopic">Loading topic...</span>
+    </div>
     <div id="round-info" class="round-info">
         <span id="currentPhase">N/A</span>
         <span id="timeRemaining">00:00</span>
@@ -84,13 +87,28 @@
         <button id="beginRound2Button" class="begin-round-button">Begin Round 2</button>
         <button id="beginRound3Button" class="begin-round-button">Begin Round 3</button>
         <button id="beginRound4Button" class="begin-round-button">Begin Round 4</button>
+        <button id="beginRound5Button" class="begin-round-button">Begin Round 5</button>
         <button id="submitAgreementButton" class="begin-round-button">Submit Agreement</button>
         <button id="pauseButton" class="pause-button">Pause</button>
+        <button id="resetScoresButton" class="begin-round-button">Reset Scores</button>
+        <button id="exitRoundButton" class="begin-round-button">Exit Round</button>
+        <button id="adjustFailuresButton" class="begin-round-button">Adjust Failures</button>
         <button class="close-admin-menu-button">X</button>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
     <script src="/static/js/home.js"></script>
+    <script>
+        $(document).ready(function() {
+            socket.emit('request_topic_update');
+            $('#adjustFailuresButton').click(function() {
+                const newFailures = prompt("Enter the new value for collective failures:");
+                if (newFailures !== null) {
+                    socket.emit('adjust_failures', { failures: parseInt(newFailures, 10) });
+                }
+            });
+        });
+    </script>
 </body>
 </html>

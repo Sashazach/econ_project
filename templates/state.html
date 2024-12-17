@@ -7,6 +7,9 @@
     <title>Test</title>
 </head>
     <body>
+        <div id="topic-info" class="topic-info">
+            <span id="currentTopic">Loading topic...</span>
+        </div>
         <div id="round-info" class="round-info">
             <span id="currentPhase">N/A</span>
             <span id="timeRemaining">00:00</span>
@@ -66,6 +69,7 @@
         <script>
             $(document).ready(function() {
                 loadStateTitle("{{state}}");
+                socket.emit('request_topic_update');
             });
         </script>
     </body>

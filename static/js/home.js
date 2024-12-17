@@ -59,6 +59,9 @@ $(document).ready(function() {
     $('#beginRound4Button').click(function() {
         socket.emit('begin_round', 4);
     });
+    $('#beginRound5Button').click(function() {
+        socket.emit('begin_round', 5);
+    });
 
     $('#pauseButton').click(function() {
         socket.emit('toggle_pause');
@@ -66,6 +69,23 @@ $(document).ready(function() {
 
     $('#submitAgreementButton').click(function() {
         socket.emit('submit_agreement');
+    });
+
+    $('#resetScoresButton').click(function() {
+        if (confirm('Are you sure you want to reset all scores? This cannot be undone.')) {
+            socket.emit('reset_scores');
+        }
+    });
+
+    $('#exitRoundButton').click(function() {
+        socket.emit('exit_round');
+    });
+
+    $('#adjustFailuresButton').click(function() {
+        const newFailures = prompt("Enter the new value for collective failures:");
+        if (newFailures !== null) {
+            socket.emit('adjust_failures', { failures: parseInt(newFailures, 10) });
+        }
     });
 
     // Set initial phase
@@ -90,6 +110,15 @@ $(document).ready(function() {
     socket.on('redirect', (data) => {
         window.location.href = data.url;
     });
+
+    socket.emit('request_topic_update');
+});
+
+socket.on('topic_update', (data) => {
+    const currentTopic = document.getElementById('currentTopic');
+    if (currentTopic) {
+        currentTopic.textContent = data.topic;
+    }
 });
 
 function initiateConnection() {

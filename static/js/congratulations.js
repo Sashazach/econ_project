@@ -89,7 +89,7 @@ function handleCongratsData(data) {
 
         let total = 0;
         // Add rounds data
-        for (let round = 1; round <= 4; round++) {
+        for (let round = 1; round <= 5; round++) {
             const cell = document.createElement('td');
             const roundData = data[state] || {};
             const value = roundData[round] || 0;
