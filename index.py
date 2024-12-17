@@ -3,7 +3,7 @@ from flask_socketio import SocketIO, emit
 import secrets
 import threading
 import time
-from interests import BLURBS
+from blurbs import BLURBS
 from ai import analyzeAgreement  # Import the analyzeAgreement function
 
 state_approvals = [False, False, False, False, False, False]
