@@ -64,7 +64,7 @@ def reset_scores():
 
 def end_round(mode="normal"):
     global round_running, current_text, state_approvals, collective_failures
-    if mode != "exited by force":
+    if mode != "normal":
         collective_failures += 1
         if collective_failures >= 2:
             send_notification("Two rounds have been inconclusive. Redirecting to the congratulations screen...")
