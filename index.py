@@ -32,7 +32,6 @@ current_phase = "Waiting for round to start."
 time_remaining = 0
 round_running = False  # Add a flag to track if a round is running
 paused = False  # Add a flag to track if the round is paused
-inconclusive_rounds = 0
 
 round_phases = {
     0: [("Team Thinking Time", 120), ("Discuss & Draft Agreement", 300), ("Final Decisions", 45)],
