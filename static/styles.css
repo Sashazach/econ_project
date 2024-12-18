@@ -275,10 +275,18 @@ a {
     height: 400px;
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
     border: 2px solid #4CAF50;
     color: #fff;
+}
+
+.admin-menu-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    width: 100%;
+    justify-items: center;
 }
 
 .pause-button {
@@ -320,6 +328,7 @@ a {
     font-size: 18px;
     cursor: pointer;
     color: #fff;
+    margin-top: 20px;
 }
 
 .close-admin-menu-button:hover {
@@ -594,6 +603,10 @@ tr:hover td.highest-total {
     margin: 2rem 0;
     filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
     animation: trophyGlow 2s ease-in-out infinite;
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #ff0000;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 @keyframes trophyGlow {
@@ -718,4 +731,13 @@ tr:hover td.highest-total {
     color: #333;
     font-weight: bold;
     color: #4CAF50;
+}
+
+/* Add these new styles */
+.failure-message {
+    color: #ff0000 !important;
+    background: linear-gradient(45deg, #ff0000, #cc0000) !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
 }

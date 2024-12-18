@@ -52,16 +52,29 @@ document.addEventListener('DOMContentLoaded', () => {
     // Handle the response from the server
     socket.on('congrats_data', (data) => {
         console.log("Received congrats data:", data);
-        if (data && data.gameData) {
+        if (data.result === "collective_failure") {
+            console.error("Collective failure occurred");
+            const congratsMessage = document.getElementById('congratsMessage');
+            const trophyImage = document.querySelector('.trophy-image');
+            
+            if (congratsMessage) {
+                congratsMessage.textContent = 'Complete Failure!';
+                congratsMessage.classList.add('failure-message');
+            }
+            if (trophyImage) {
+                trophyImage.src = '/static/images/game-over.png';
+                trophyImage.alt = 'Game Over';
+            }
+        } else if (data && data.gameData) {
             handleCongratsData(data.gameData);
             // Update winner name
             const winnerNameElement = document.getElementById('winnerName');
             if (winnerNameElement && data.winner) {
-                winnerNameElement.textContent = data.winner;
+            winnerNameElement.textContent = data.winner;
             }
         }
     });
-});
+}); 
 
 function handleCongratsData(data) {
     console.log("Processing game data:", data);

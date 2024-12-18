@@ -123,9 +123,11 @@ def handle_request_congrats_data():
     highest_total_indices = get_highest_total_column()
     winner_names = format_highest_total_columns(highest_total_indices)
     
+    result = 'collective_failure' if collective_failures >= 2 else 'win'
     response_data = {
         'gameData': formatted_data,
-        'winner': winner_names
+        'winner': winner_names,
+        'result': result
     }
     emit('congrats_data', response_data, to=request.sid)
 
