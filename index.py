@@ -20,7 +20,7 @@ socketio = SocketIO(app, cors_allowed_origins="*", async_mode='threading')
 stateNames = ["New York", "Massachusetts", "Georgia", "South Carolina", "Pennsylvania", "Virginia"];
 states = ['ny', 'ma', 'ga', 'sc', 'pa', 'va']
 round_topics = ["In the presidential election, should each state get one vote OR should each person get one vote OR is there another solution involving proportional voting?", "Should slaves be counted in population data; therefore impacting state representation in Congress?", "Should we tax imports and exports, if yes, how so?", "How much control should the federal government have on trade and tariffs?", "Should the federal government take care of (“bail out”) the individual states’ war debts?"]
-topic_names = ["In presidential election, one vote per state, one vote per person, or propose a proportional solution.", "Slaves in Population Data", "Taxing Imports and Exports", "Federal Government Control on Trade", "Federal Government Bail out War Debt"]
+topic_names = ["National Pop Vote or Proportional.", "Slaves in Population Data", "Taxing Imports and Exports", "Federal Government Control on Trade", "Federal Government Bail out War Debt"]
 
 ADMIN_PASSWORD = "Econ"
 
