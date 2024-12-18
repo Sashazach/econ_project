@@ -52,10 +52,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Handle the response from the server
     socket.on('congrats_data', (data) => {
         console.log("Received congrats data:", data);
+        
         if (data.result === "collective_failure") {
             console.error("Collective failure occurred");
             const congratsMessage = document.getElementById('congratsMessage');
             const trophyImage = document.querySelector('.trophy-image');
+            const winnerNameElement = document.getElementById('winnerName');
             
             if (congratsMessage) {
                 congratsMessage.textContent = 'Complete Failure!';
@@ -65,12 +67,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 trophyImage.src = '/static/images/game-over.png';
                 trophyImage.alt = 'Game Over';
             }
-        } else if (data && data.gameData) {
+            if (winnerNameElement) {
+                winnerNameElement.textContent = 'Nobody';
+            }
+        }
+        
+        else {
             handleCongratsData(data.gameData);
-            // Update winner name
-            const winnerNameElement = document.getElementById('winnerName');
-            if (winnerNameElement && data.winner) {
-            winnerNameElement.textContent = data.winner;
+            if (data.winner && document.getElementById('winnerName')) {
+                document.getElementById('winnerName').textContent = data.winner;
             }
         }
     });
