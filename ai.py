@@ -72,7 +72,7 @@ Summary Table:
 **Agreed Compromise:**
 - "{compromise}"
 
-Based on the above information, assign points to each of the six teams according to how much they benefit from the agreed compromise. Output the points as a comma-separated list without any spaces or additional text. The points for each state should be outputted in the following order: New York, Massachusetts, Georgia, South Carolina, Pennsylvania, Virginia. Points should always be positive and add up to 20 every time."""
+Based on the above information, assign points to each of the six teams according to how much they benefit from the agreed compromise, specifically within the following categories: added representation, added financial capital, larger influence. Output the points as a comma-separated list without any spaces or additional text. The points for each state should be outputted in the following order: New York, Massachusetts, Georgia, South Carolina, Pennsylvania, Virginia. Points should always be positive and add up to 20 every time."""
     print(prompt)
     completion = client.chat.completions.create(
         model="o1-mini",
