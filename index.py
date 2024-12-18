@@ -35,11 +35,11 @@ paused = False  # Add a flag to track if the round is paused
 inconclusive_rounds = 0
 
 round_phases = {
-    0: [("Team Thinking Time", 60), ("Present ideas", 5), ("Draft Agreement", 5), ("Final Decisions", 5)],
-    1: [("Team Thinking Time", 60), ("Present ideas", 5), ("Draft Agreement", 5), ("Final Decisions", 15)],
-    2: [("Team Thinking Time", 60), ("Present ideas", 180), ("Draft Agreement", 200), ("Final Decisions", 30)],
-    3: [("Team Thinking Time", 60), ("Present ideas", 180), ("Draft Agreement", 200), ("Final Decisions", 30)],
-    4: [("Team Thinking Time", 60), ("Present ideas", 180), ("Draft Agreement", 200), ("Final Decisions", 30)],
+    0: [("Team Thinking Time", 120), ("Discuss & Draft Agreement", 300), ("Final Decisions", 45)],
+    1: [("Team Thinking Time", 120), ("Discuss & Draft Agreement", 300), ("Final Decisions", 45)],
+    2: [("Team Thinking Time", 120), ("Discuss & Draft Agreement", 300), ("Final Decisions", 45)],
+    3: [("Team Thinking Time", 120), ("Discuss & Draft Agreement", 300), ("Final Decisions", 45)],
+    4: [("Team Thinking Time", 120), ("Discuss & Draft Agreement", 300), ("Final Decisions", 45)],
 }    
 
 def run_round(round : int):
